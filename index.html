@@ -5,7 +5,7 @@
 <title>Primjer zaglavlja i podnožja</title>
 <style>
   header {
-    background-color: #4CAF50; /* zelena boja zaglavlja */
+    background-color: #494276; /* boja zaglavlja */
     color: white;
     padding: 20px;
     text-align: center;
@@ -18,6 +18,22 @@
     text-align: center;
     font-size: 18px;
   }
+  nav.sidebar {
+    grid-area: sidebar;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  nav.sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  nav.sidebar ul li {
+    margin-bottom: 10px;
+  }
+  nav.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+  }
   body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -29,6 +45,14 @@
 <header>
   Ovo je zaglavlje stranice
 </header>
+<nav class="sidebar">
+  <ul>
+    <li><a href="#">Izbornik 1</a></li>
+    <li><a href="#">Izbornik 2</a></li>
+    <li><a href="#">Izbornik 3</a></li>
+    <li><a href="#">Izbornik 4</a></li>
+  </ul>
+</nav>
 
 <main>
   <p>Ovdje ide sadržaj vaše stranice.</p>
@@ -40,3 +64,4 @@
 
 </body>
 </html>
+
