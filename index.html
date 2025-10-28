@@ -2,66 +2,412 @@
 <html lang="hr">
 <head>
 <meta charset="UTF-8" />
-<title>Primjer zaglavlja i podnožja</title>
+<title>Stranica s bočnim izbornicima</title>
 <style>
+  :root {
+    --dark-blue: #525D66; /* tamno siva */
+    --light-blue: #FD77EA; /* svjetlija nijansa */
+    --light-gray: #f0f0f0; /* svijetlo siva */
+    --header-text-color: #b6b9bf; /* 10 nijansi svjetlije */
+    --header-text-shadow-color: #d3d6db; /* čak 15 nijansi svjetlije */
+    --footer-text-color: #bcc0c7;
+  }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden; /* Onemogućava scroll cijele stranice */
+    font-family: Arial, sans-serif;
+  }
+
+  body {
+    position: relative;
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    grid-template-rows: 120px 1fr 80px;
+    grid-template-areas:
+      "header header header"
+      "content content content"
+      "footer footer footer";
+    height: 100vh;
+  }
+
   header {
-    background-color: #494276; /* boja zaglavlja */
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 24px;
+    grid-area: header;
+    background-color: var(--dark-blue);
+    color: var(--header-text-color);
+    font-size: 3em;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow:
+      1px 1px 1px var(--header-text-shadow-color),
+      2px 2px 3px var(--header-text-shadow-color);
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+    z-index: 1200; /* Header na vrhu */
   }
+
   footer {
-    background-color: #333333; /* tamno siva boja podnožja */
-    color: white;
-    padding: 15px;
+    grid-area: footer;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: var(--dark-blue);
+    color: var(--footer-text-color);
+    font-family: monospace;
+    font-size: 0.8em;
+    line-height: 1.2em;
+    white-space: pre-wrap;
     text-align: center;
-    font-size: 18px;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
+    margin: 0;
+    padding: 0.5em 1em;
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 1400; /* Footer najveći z-index, iznad bočnih izbornika */
   }
-  nav.sidebar {
-    grid-area: sidebar;
-    background-color: #f4f4f4;
-    padding: 20px;
+
+  main {
+    grid-area: content;
+    background-color: var(--light-gray);
+    padding: 1em 2em; /* povećano lijevo i desno za margine */
+    overflow: hidden; /* NE MOŽE se skrolati */
+    margin: 0 200px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
   }
-  nav.sidebar ul {
+
+  /* Lijevi sidebar preko headera i ispod footera - MOŽE se skrolati */
+  nav.sidebar-left {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100vh;
+    background-color: var(--light-blue);
+    color: white;
+    padding: 1em;
+    box-shadow: 4px 0px 8px rgba(0,0,0,0.25);
+    box-sizing: border-box;
+    overflow-y: auto; /* Omogućava skrolanje */
+    overflow-x: hidden;
+    z-index: 1300; /* Između headera i footera */
+  }
+
+  /* Desni sidebar preko footera i ispod headera - MOŽE se skrolati */
+  nav.sidebar-right {
+    position: fixed;
+    top: 120px; /* Ispod headera */
+    right: 0;
+    width: 300px;
+    height: calc(100vh - 120px); /* Visina bez headera */
+    background-color: var(--light-blue);
+    color: white;
+    padding: 1em;
+    box-shadow: -4px 0 8px rgba(0,0,0,0.25);
+    box-sizing: border-box;
+    overflow-y: auto; /* Omogućava skrolanje */
+    overflow-x: hidden;
+    z-index: 1500; /* Iznad lijevog sidebara, ispod footera */
+  }
+
+  nav.sidebar-left ul,
+  nav.sidebar-right ul {
     list-style: none;
     padding: 0;
   }
-  nav.sidebar ul li {
+
+  nav.sidebar-left ul li,
+  nav.sidebar-right ul li {
+    margin-bottom: 15px;
+  }
+
+  nav.sidebar-left ul li a,
+  nav.sidebar-right ul li a {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  nav.sidebar-left ul li a:hover,
+  nav.sidebar-right ul li a:hover {
+    text-decoration: underline;
+    color: #cce0ff;
+  }
+
+  /* Stil slika sa transparentnom pozadinom u izbornicima */
+  nav.sidebar-left ul li img,
+  nav.sidebar-right ul li img {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: transparent;
+  }
+
+  nav.sidebar-left:hover,
+  nav.sidebar-right:hover {
+    background-color: #e07ee6;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.35);
+  }
+
+  /* Stilovi za prikaz sadržaja u mainu */
+  #mainContent {
+    width: 100%;
+    max-width: 800px;
+  }
+
+  #mainContent h2 {
+    color: var(--dark-blue);
+    text-align: center;
     margin-bottom: 10px;
   }
-  nav.sidebar ul li a {
-    text-decoration: none;
-    color: #333;
+
+  #mainContent p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
   }
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+
+  /* Stilovi za tablice istinitosti */
+  .truth-table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .truth-table th {
+    background-color: var(--dark-blue);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .truth-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    background-color: white;
+  }
+
+  .truth-table tr:nth-child(even) td {
+    background-color: #f9f9f9;
+  }
+
+  .truth-table tr:hover td {
+    background-color: #e8e8e8;
+  }
+
+  /* Scrollbar stilovi za sidebars */
+  nav.sidebar-left::-webkit-scrollbar,
+  nav.sidebar-right::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  nav.sidebar-left::-webkit-scrollbar-track,
+  nav.sidebar-right::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+  }
+
+  nav.sidebar-left::-webkit-scrollbar-thumb,
+  nav.sidebar-right::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 4px;
+  }
+
+  nav.sidebar-left::-webkit-scrollbar-thumb:hover,
+  nav.sidebar-right::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.5);
   }
 </style>
 </head>
 <body>
 
 <header>
-  Ovo je zaglavlje stranice
+  Materijali iz informatike
 </header>
-<nav class="sidebar">
+
+<nav class="sidebar-left">
+  <br/><br/><br/><br/><br/><br/>
+<h3>Logički sklopovi</h3> 
   <ul>
-    <li><a href="#">Izbornik 1</a></li>
-    <li><a href="#">Izbornik 2</a></li>
-    <li><a href="#">Izbornik 3</a></li>
-    <li><a href="#">Izbornik 4</a></li>
+    <li><a href="#" onclick="showTruthTable('AND'); return false;">
+      <img src="AND.png" alt="AND sklop" /> AND sklop</a>
+    </li><br/><br/>
+    <li><a href="#" onclick="showTruthTable('OR'); return false;">
+      <img src="OR.png" alt="OR sklop" /> OR sklop</a>
+    </li><br/><br/>
+    <li><a href="#" onclick="showTruthTable('XOR'); return false;">
+      <img src="NOT.png" alt="XOR sklop" /> XOR sklop</a>
+    </li><br/><br/>
+ <li><a href="#" onclick="showTruthTable('NAND'); return false;">
+      <img src="NAND.png" alt="NAND sklop" /> NAND sklop</a>
+    </li><br/><br/>
+    <li><a href="#" onclick="showTruthTable('NOR'); return false;">
+      <img src="NOR.png" alt="NOR sklop" /> NOR sklop</a>
+    </li><br/><br/>
+    <li><a href="#" onclick="showTruthTable('XNOR'); return false;">
+      <img src="XNOR.png" alt="XNOR sklop" /> XNOR sklop</a>
+    </li><br/><br/>
+    <li><a href="#" onclick="showTruthTable('NOT'); return false;">
+      <img src="XNOR.png" alt="NOT sklop" /> NOT sklop</a>
+    </li>
+
   </ul>
+<br/><br/><br/><br/><br/><br/><br/>
 </nav>
 
 <main>
-  <p>Ovdje ide sadržaj vaše stranice.</p>
+  <div id="mainContent">
+    <h2>Glavni sadržaj</h2>
+    <p>Kliknite na sklop iz lijevog ili desnog izbornika da prikažete tablicu istinitosti.</p>
+  </div>
 </main>
 
+<nav class="sidebar-right">
+  <ul>
+    <li>
+      <img src="prtsc-ikona.png" alt="NAND sklop" /> Print screen prozor
+    </li><br/><br/>
+    <li>
+      <img src="NOR.png" alt="NOR sklop" /> NOR sklop
+    </li><br/><br/>
+    <li>
+      <img src="XNOR.png" alt="XNOR sklop" /> XNOR sklop
+    </li><br/><br/>
+    <li>
+      <img src="XNOR.png" alt="NOT sklop" /> NOT sklop
+    </li>
+  </ul>
+</nav>
+
 <footer>
-  Ovo je podnožje stranice
 </footer>
+
+<script>
+  // Definicija tablica istinitosti za sve sklopove
+  const truthTables = {
+    'AND': {
+      title: 'AND sklop (Logičko I)',
+      description: 'Izlaz je 1 samo kada su oba ulaza 1.',
+      headers: ['A', 'B', 'A AND B'],
+      rows: [
+        ['0', '0', '0'],
+        ['0', '1', '0'],
+        ['1', '0', '0'],
+        ['1', '1', '1']
+      ]
+    },
+    'OR': {
+      title: 'OR sklop (Logičko ILI)',
+      description: 'Izlaz je 1 ako je barem jedan ulaz 1.',
+      headers: ['A', 'B', 'A OR B'],
+      rows: [
+        ['0', '0', '0'],
+        ['0', '1', '1'],
+        ['1', '0', '1'],
+        ['1', '1', '1']
+      ]
+    },
+    'NOT': {
+      title: 'NOT sklop (Logičko NE)',
+      description: 'Izlaz je suprotan ulazu.',
+      headers: ['A', 'NOT A'],
+      rows: [
+        ['0', '1'],
+        ['1', '0']
+      ]
+    },
+    'NAND': {
+      title: 'NAND sklop (NE-I)',
+      description: 'Izlaz je 0 samo kada su oba ulaza 1.',
+      headers: ['A', 'B', 'A NAND B'],
+      rows: [
+        ['0', '0', '1'],
+        ['0', '1', '1'],
+        ['1', '0', '1'],
+        ['1', '1', '0']
+      ]
+    },
+    'NOR': {
+      title: 'NOR sklop (NE-ILI)',
+      description: 'Izlaz je 1 samo kada su oba ulaza 0.',
+      headers: ['A', 'B', 'A NOR B'],
+      rows: [
+        ['0', '0', '1'],
+        ['0', '1', '0'],
+        ['1', '0', '0'],
+        ['1', '1', '0']
+      ]
+    },
+    'XOR': {
+      title: 'XOR sklop (Ekskluzivno ILI)',
+      description: 'Izlaz je 1 kada su ulazi različiti.',
+      headers: ['A', 'B', 'A XOR B'],
+      rows: [
+        ['0', '0', '0'],
+        ['0', '1', '1'],
+        ['1', '0', '1'],
+        ['1', '1', '0']
+      ]
+    },
+    'XNOR': {
+      title: 'XNOR sklop (Ekskluzivno NE-ILI)',
+      description: 'Izlaz je 1 kada su ulazi jednaki.',
+      headers: ['A', 'B', 'A XNOR B'],
+      rows: [
+        ['0', '0', '1'],
+        ['0', '1', '0'],
+        ['1', '0', '0'],
+        ['1', '1', '1']
+      ]
+    }
+  };
+
+  // Funkcija za prikaz tablice istinitosti
+  function showTruthTable(gateType) {
+    const content = document.getElementById('mainContent');
+    const table = truthTables[gateType];
+
+    if (!table) {
+      content.innerHTML = '<h2>Glavni sadržaj</h2><p>Tablica istinitosti nije dostupna.</p>';
+      return;
+    }
+
+    // Generiranje HTML-a za tablicu
+    let html = `<h2>${table.title}</h2>`;
+    html += `<p>${table.description}</p>`;
+    html += '<table class="truth-table">';
+
+    // Zaglavlje tablice
+    html += '<tr>';
+    table.headers.forEach(header => {
+      html += `<th>${header}</th>`;
+    });
+    html += '</tr>';
+
+    // Redovi tablice
+    table.rows.forEach(row => {
+      html += '<tr>';
+      row.forEach(cell => {
+        html += `<td>${cell}</td>`;
+      });
+      html += '</tr>';
+    });
+
+    html += '</table>';
+    content.innerHTML = html;
+  }
+</script>
 
 </body>
 </html>
-
